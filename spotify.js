@@ -2,6 +2,23 @@ const SpotifyWebApi = require('spotify-web-api-node');
 const Cache = require('async-disk-cache')
 const trackCache = new Cache('spotify-tracks');
 
+
+cleanupTitle = function (name) {
+    return name
+        .replaceAll("'", " ")
+        .replaceAll("UND|AND", " ")
+        .replaceAll("ODER|OR", " ")
+        .replaceAll("NICHT|NOT", " ")
+}
+cleanupArtist = function (name) {
+    return name
+        .replaceAll("FEAT[.]*$", " ")
+        .replaceAll("/", " ")
+        .replaceAll("'", " ")
+        .replaceAll("UND|AND", " ")
+        .replaceAll("ODER|OR", " ")
+        .replaceAll("NICHT|NOT", " ")
+}
 /**
  *
  * @param songs e.g. [{artist: "Samim", title: "heater"}]
@@ -9,7 +26,10 @@ const trackCache = new Cache('spotify-tracks');
 module.exports.findSongs = async function (songs) {
     const result = []
     for (const song of songs) {
-        let query = `track:${song.title} artist:${song.artist}`
+
+        let artist = cleanupArtist(song.artist)
+        let title = cleanupTitle(song.title)
+        let query = `track:${title} artist:${artist}`
 
         if (await trackCache.has(query)) {
             let cached = await trackCache.get(query)
