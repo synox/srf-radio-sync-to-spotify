@@ -1,6 +1,6 @@
-const fetch = require('node-fetch')
+import fetch from "node-fetch"
 
-module.exports.channelIds = {
+const channelIds = {
     srfRadioVirus: "66815fe2-9008-4853-80a5-f9caaffdf3a9",
     srfRadio3: "dd0fa1ba-4ff6-4e1a-ab74-d7e49057d96f",
 }
@@ -12,7 +12,7 @@ module.exports.channelIds = {
  * @param toDate
  * @returns {Promise<{title, artist}>}
  */
-module.exports.getPlaylist = async function (channel, fromDate, toDate) {
+const getPlaylist = async function (channel, fromDate, toDate) {
     /*
     {
   songList: [
@@ -43,3 +43,4 @@ module.exports.getPlaylist = async function (channel, fromDate, toDate) {
         .reverse() // the api provides the songs in newest-to-oldest order
 }
 
+export default {getPlaylist, channelIds};

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --es-module-specifier-resolution=node index.js"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +14,9 @@
     "async-disk-cache": "^2.1.0",
     "node-fetch": "^2.6.1",
     "spotify-web-api-node": "^5.0.0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "eslint": "^7.17.0"
   }
 }

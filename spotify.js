@@ -1,16 +1,17 @@
-const SpotifyWebApi = require('spotify-web-api-node');
-const Cache = require('async-disk-cache')
+import SpotifyWebApi from "spotify-web-api-node"
+import Cache from "async-disk-cache"
+
 const trackCache = new Cache('spotify-tracks');
 
 
-cleanupTitle = function (name) {
+const cleanupTitle = function (name) {
     return name
         .replaceAll("'", " ")
         .replaceAll(/\bUND\b|\bAND\b/g, " ")
         .replaceAll(/\bODER\b|\bOR\b/g, " ")
         .replaceAll(/\bNICHT\b|\bNOT\b/g, " ")
 }
-cleanupArtist = function (name) {
+const cleanupArtist = function (name) {
     return name
         .replaceAll(/FEAT[.]?/g, " ")
         .replaceAll("/", " ")
@@ -21,7 +22,7 @@ cleanupArtist = function (name) {
         .replaceAll(/\bODER\b|\bOR\b/g, " ")
         .replaceAll(/\bNICHT\b|\bNOT\b/g, " ")
 }
-removeFeatArtist = function (name) {
+const removeFeatArtist = function (name) {
     return name
         .replaceAll(/FEAT.*/g, " ")
         .replaceAll(/[/].*$/g, "")
@@ -52,7 +53,7 @@ async function findSongCached(query) {
  *
  * @param songs e.g. [{artist: "Samim", title: "heater"}]
  */
-module.exports.findSongs = async function (songs) {
+export async function findSongs(songs) {
     const result = []
     for (const song of songs) {
 
@@ -81,7 +82,7 @@ module.exports.findSongs = async function (songs) {
     return result
 }
 
-module.exports.userPlaylistExists = async function (playlistName) {
+export async function userPlaylistExists(playlistName) {
     const userId = (await spotifyApi.getMe()).body.id
     const playlists = await spotifyApi.getUserPlaylists(userId)
     let playlist = playlists.body.items.find(item => item.name === playlistName)
@@ -98,7 +99,7 @@ function chunkArray(array, size) {
     return result
 }
 
-module.exports.createPlaylist = async function (playlistName, trackIds) {
+export async function createPlaylist(playlistName, trackIds) {
     let playlist = (await spotifyApi.createPlaylist(playlistName, {
         'description': 'My description',
         'public': true
@@ -127,7 +128,7 @@ const state = 'some-state-of-my-choice'
 const showDialog = true
 const responseType = 'token'
 
-module.exports.login = async function (spotifyCredentials) {
+export async function login(spotifyCredentials) {
     spotifyApi = new SpotifyWebApi({
         clientId: spotifyCredentials.clientId,
         clientSecret: spotifyCredentials.clientSecret,
@@ -139,7 +140,7 @@ module.exports.login = async function (spotifyCredentials) {
     await spotifyApi.getMe()
 }
 
-module.exports.startLoginWorkflow = function (spotifyCredentials) {
+export async function startLoginWorkflow(spotifyCredentials) {
     spotifyApi = new SpotifyWebApi({
         clientId: spotifyCredentials.clientId,
         clientSecret: spotifyCredentials.clientSecret,

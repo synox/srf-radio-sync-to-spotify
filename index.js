@@ -1,14 +1,13 @@
-const srf = require("./srf.js")
-const spotify = require("./spotify.js")
-let spotifyCredentials = require('./spotify_credentials.json');
-
+import srf from "./srf.js"
+import {startLoginWorkflow,login,createPlaylist,userPlaylistExists,findSongs} from "./spotify.js"
+import spotifyCredentials from "./spotify_credentials.json"
 
 async function main() {
     try {
-        await spotify.login(spotifyCredentials)
+        await login(spotifyCredentials)
     } catch (e) {
         console.error("error on login", e)
-        spotify.startLoginWorkflow(spotifyCredentials);
+        startLoginWorkflow(spotifyCredentials);
     }
 
     await copyToSpotify(srf.channelIds.srfRadio3, "2021-01-01")
@@ -16,16 +15,17 @@ async function main() {
 
 async function copyToSpotify(channel, fromDate) {
     const name = `SRF 3 ${fromDate}`
-    if (await spotify.userPlaylistExists(name)) {
+    if (await userPlaylistExists(name)) {
         console.log("playlist already exists, stopped")
         return;
     }
+    console.log(`### fetching ${name} ###`)
 
     const songs = await srf.getPlaylist(channel, fromDate, fromDate)
 
-    const spotifyTracks =  await spotify.findSongs(songs)
+    const spotifyTracks = await findSongs(songs)
 
-    await spotify.createPlaylist(name, spotifyTracks);
+    await createPlaylist(name, spotifyTracks);
 }
 
 main();
