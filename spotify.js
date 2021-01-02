@@ -123,13 +123,16 @@ const state = 'some-state-of-my-choice'
 const showDialog = true
 const responseType = 'token'
 
-module.exports.login = function (spotifyCredentials) {
+module.exports.login = async function (spotifyCredentials) {
     spotifyApi = new SpotifyWebApi({
         clientId: spotifyCredentials.clientId,
         clientSecret: spotifyCredentials.clientSecret,
         accessToken: spotifyCredentials.accessToken,
         redirectUri
     })
+
+    // verify that it works
+    await spotifyApi.getMe()
 }
 
 module.exports.startLoginWorkflow = function (spotifyCredentials) {

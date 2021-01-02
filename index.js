@@ -4,8 +4,12 @@ let spotifyCredentials = require('./spotify_credentials.json');
 
 
 async function main() {
-    // spotify.startLoginWorkflow(spotifyCredentials);
-    spotify.login(spotifyCredentials)
+    try {
+        await spotify.login(spotifyCredentials)
+    } catch (e) {
+        console.error("error on login", e)
+        spotify.startLoginWorkflow(spotifyCredentials);
+    }
 
     await copyToSpotify(srf.channelIds.srfRadio3, "2021-01-01")
 }
