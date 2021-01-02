@@ -6,19 +6,46 @@ const trackCache = new Cache('spotify-tracks');
 cleanupTitle = function (name) {
     return name
         .replaceAll("'", " ")
-        .replaceAll("UND|AND", " ")
-        .replaceAll("ODER|OR", " ")
-        .replaceAll("NICHT|NOT", " ")
+        .replaceAll(/\bUND\b|\bAND\b/g, " ")
+        .replaceAll(/\bODER\b|\bOR\b/g, " ")
+        .replaceAll(/\bNICHT\b|\bNOT\b/g, " ")
 }
 cleanupArtist = function (name) {
     return name
-        .replaceAll("FEAT[.]*$", " ")
+        .replaceAll(/FEAT[.]?/g, " ")
         .replaceAll("/", " ")
         .replaceAll("'", " ")
-        .replaceAll("UND|AND", " ")
-        .replaceAll("ODER|OR", " ")
-        .replaceAll("NICHT|NOT", " ")
+        .replaceAll(/\bUND\b|\bAND\b/g, " ")
+        .replaceAll(/\bODER\b|\bOR\b/g, " ")
+        .replaceAll(/\bNICHT\b|\bNOT\b/g, " ")
 }
+removeFeatArtist = function (name) {
+    return name
+        .replaceAll(/FEAT.*/g, " ")
+        .replaceAll(/[/].*$/g, "")
+}
+
+
+async function findSongCached(query) {
+    if (await trackCache.has(query)) {
+        let cached = await trackCache.get(query)
+        const trackId = cached.value
+        if (trackId === "NOT_FOUND") {
+            return null;
+        }
+        return `spotify:track:${trackId}`
+    }
+
+    const track = await spotifyApi.searchTracks(query, {limit: 1})
+    if (track.body.tracks.items.length === 0) {
+        await trackCache.set(query, "NOT_FOUND")
+        return null;
+    }
+    let trackId = track.body.tracks.items[0].id
+    await trackCache.set(query, trackId)
+    return trackId;
+}
+
 /**
  *
  * @param songs e.g. [{artist: "Samim", title: "heater"}]
@@ -31,26 +58,21 @@ module.exports.findSongs = async function (songs) {
         let title = cleanupTitle(song.title)
         let query = `track:${title} artist:${artist}`
 
-        if (await trackCache.has(query)) {
-            let cached = await trackCache.get(query)
-            const trackId = cached.value
-            if (trackId === "NOT_FOUND") {
-                continue;
+        let trackId = await findSongCached(query)
+        if (!trackId) {
+            // retry without feat. artists
+            artist = cleanupArtist(removeFeatArtist(song.artist))
+            query = `track:${title} artist:${artist}`
+            trackId = await findSongCached(query)
+            if (trackId) {
+                console.log("found without feat. on second try: ", song, query)
             } else {
-                result.push(`spotify:track:${trackId}`)
+                console.log("not found after 2 tries: ", song, query)
             }
-            continue;
         }
-
-        const track = await spotifyApi.searchTracks(query, {limit: 1})
-        if (track.body.tracks.items.length === 0) {
-            console.log("not found: ", song)
-            await trackCache.set(query, "NOT_FOUND")
-            continue;
+        if (trackId) {
+            result.push(`spotify:track:${trackId}`)
         }
-        let trackId = track.body.tracks.items[0].id
-        await trackCache.set(query, trackId)
-        result.push(`spotify:track:${trackId}`)
     }
     return result
 }
