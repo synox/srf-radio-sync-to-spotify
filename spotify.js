@@ -135,9 +135,6 @@ export async function createPlaylist(playlistName, trackIds) {
     console.log(`added all ${trackIds.length} tracks`)
 }
 
-
-
-
 export async function login(spotifyCredentials) {
     spotifyApi = new SpotifyWebApi({
         clientId: spotifyCredentials.clientId,
