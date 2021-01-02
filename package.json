@@ -1,0 +1,17 @@
+{
+  "name": "srf-radio-sync-to-spotify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async-disk-cache": "^2.1.0",
+    "node-fetch": "^2.6.1",
+    "spotify-web-api-node": "^5.0.0"
+  }
+}
