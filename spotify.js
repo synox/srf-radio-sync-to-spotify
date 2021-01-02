@@ -12,10 +12,14 @@ module.exports.findSongs = async function (songs) {
         let query = `track:${song.title} artist:${song.artist}`
 
         if (await trackCache.has(query)) {
-            const value = (await trackCache.get(query)).value
-            if (value !== "NOT_FOUND") {
-                return value;
+            let cached = await trackCache.get(query)
+            const trackId = cached.value
+            if (trackId === "NOT_FOUND") {
+                continue;
+            } else {
+                result.push(`spotify:track:${trackId}`)
             }
+            continue;
         }
 
         const track = await spotifyApi.searchTracks(query, {limit: 1})
