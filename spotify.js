@@ -14,6 +14,8 @@ cleanupArtist = function (name) {
     return name
         .replaceAll(/FEAT[.]?/g, " ")
         .replaceAll("/", " ")
+        .replaceAll("&", " ")
+        .replaceAll(",", " ")
         .replaceAll("'", " ")
         .replaceAll(/\bUND\b|\bAND\b/g, " ")
         .replaceAll(/\bODER\b|\bOR\b/g, " ")
@@ -33,7 +35,7 @@ async function findSongCached(query) {
         if (trackId === "NOT_FOUND") {
             return null;
         }
-        return `spotify:track:${trackId}`
+        return trackId
     }
 
     const track = await spotifyApi.searchTracks(query, {limit: 1})
@@ -65,9 +67,9 @@ module.exports.findSongs = async function (songs) {
             query = `track:${title} artist:${artist}`
             trackId = await findSongCached(query)
             if (trackId) {
-                console.log("found without feat. on second try: ", song, query)
+                console.log("found without feat.: ", song, query)
             } else {
-                console.log("not found after 2 tries: ", song, query)
+                console.error("not found", song, query)
             }
         }
         if (trackId) {
@@ -100,11 +102,9 @@ module.exports.createPlaylist = async function (playlistName, trackIds) {
     })).body
     console.log('Created playlist!');
 
-    console.log("songs", trackIds)
     for (const chunk of chunkArray(trackIds, 100)) {
-        console.log("Chunk", chunk)
         spotifyApi.addTracksToPlaylist(playlist.id, chunk)
-        console.log("added chunk of tracks:", chunk)
+        console.log("added chunk of tracks:")
     }
     console.log("added all tracks")
 }

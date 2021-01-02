@@ -27,13 +27,14 @@ module.exports.getPlaylist = async function (channel, fromDate, toDate) {
     ]
    }
      */
-    const response = await fetch(`https://il.srgssr.ch/integrationlayer/2.0/srf/songList/radio/byChannel/${channel}?from=${fromDate}T00%3A00%3A00%2B01%3A00&to=${toDate}T23%3A59%3A00%2B01%3A00&pageSize=500`, {
+    let url = `https://il.srgssr.ch/integrationlayer/2.0/srf/songList/radio/byChannel/${channel}?from=${fromDate}T00%3A00%3A00%2B01%3A00&to=${toDate}T23%3A59%3A00%2B01%3A00&pageSize=500`
+    console.log("fetching ", url)
+    const response = await fetch(url, {
         "headers": {
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0",
         },
         "method": "GET",
     })
-
     const data = JSON.parse(await response.text());
     return data.songList
         .map(entry => {
