@@ -6,25 +6,25 @@ const trackCache = new Cache('spotify-tracks');
 
 const cleanupTitle = function (name) {
     return name
-        .replaceAll("'", " ")
-        .replaceAll(/\bUND\b|\bAND\b/g, " ")
-        .replaceAll(/\bODER\b|\bOR\b/g, " ")
-        .replaceAll(/\bNICHT\b|\bNOT\b/g, " ")
+        .replaceAll("'", ' ')
+        .replaceAll(/\bUND\b|\bAND\b/g, ' ')
+        .replaceAll(/\bODER\b|\bOR\b/g, ' ')
+        .replaceAll(/\bNICHT\b|\bNOT\b/g, ' ')
 }
 const cleanupArtist = function (name) {
     return name
-        .replaceAll(/FEAT[.]?/g, " ")
-        .replaceAll("/", " ")
-        .replaceAll("&", " ")
-        .replaceAll(",", " ")
-        .replaceAll("'", " ")
-        .replaceAll(/\bUND\b|\bAND\b/g, " ")
-        .replaceAll(/\bODER\b|\bOR\b/g, " ")
-        .replaceAll(/\bNICHT\b|\bNOT\b/g, " ")
+        .replaceAll(/FEAT[.]?/g, ' ')
+        .replaceAll("/", ' ')
+        .replaceAll("&", ' ')
+        .replaceAll(",", ' ')
+        .replaceAll("'", ' ')
+        .replaceAll(/\bUND\b|\bAND\b/g, ' ')
+        .replaceAll(/\bODER\b|\bOR\b/g, ' ')
+        .replaceAll(/\bNICHT\b|\bNOT\b/g, ' ')
 }
 const removeFeatArtist = function (name) {
     return name
-        .replaceAll(/FEAT.*/g, " ")
+        .replaceAll(/FEAT.*/g, ' ')
         .replaceAll(/[/].*$/g, "")
 }
 

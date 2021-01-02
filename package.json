@@ -18,5 +18,17 @@
   "type": "module",
   "devDependencies": {
     "xo": "^0.37.1"
+  },
+  "xo": {
+    "semicolon": false,
+    "prettier": true,
+    "rules": {
+      "no-unused-vars": [
+        "error",
+        {
+          "argsIgnorePattern": "^_"
+        }
+      ]
+    }
   }
 }
