@@ -82,7 +82,8 @@ module.exports.findSongs = async function (songs) {
 module.exports.userPlaylistExists = async function (playlistName) {
     const userId = (await spotifyApi.getMe()).body.id
     const playlists = await spotifyApi.getUserPlaylists(userId)
-    return playlists.body.items.find(item => item.name === playlistName) != null
+    let playlist = playlists.body.items.find(item => item.name === playlistName)
+    return !!playlist
 
 }
 

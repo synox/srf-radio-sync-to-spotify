@@ -12,7 +12,7 @@ async function main() {
 
 async function copyToSpotify(channel, fromDate) {
     const name = `SRF 3 ${fromDate}`
-    if (spotify.userPlaylistExists(name)) {
+    if (await spotify.userPlaylistExists(name)) {
         console.log("playlist already exists, stopped")
         return;
     }
