@@ -1,3 +1,4 @@
 /node_modules/
 .idea/
 spotify_credentials.json
+*.iml
