@@ -73,7 +73,9 @@ module.exports.findSongs = async function (songs) {
             }
         }
         if (trackId) {
-            result.push(`spotify:track:${trackId}`)
+            result.push(
+                {id: `spotify:track:${trackId}`, artist: song.artist, title: song.title}
+            )
         }
     }
     return result
@@ -99,15 +101,17 @@ function chunkArray(array, size) {
 module.exports.createPlaylist = async function (playlistName, trackIds) {
     let playlist = (await spotifyApi.createPlaylist(playlistName, {
         'description': 'My description',
-        'public': false
+        'public': true
     })).body
     console.log('Created playlist!');
 
-    for (const chunk of chunkArray(trackIds, 100)) {
-        spotifyApi.addTracksToPlaylist(playlist.id, chunk)
-        console.log("added chunk of tracks:")
+    let chunks = chunkArray(trackIds, 100)
+    for (const chunk of chunks) {
+        let trackIds = chunk.map(entry => entry.id)
+        await spotifyApi.addTracksToPlaylist(playlist.id, trackIds)
+        console.log("added chunk of tracks")
     }
-    console.log("added all tracks")
+    console.log(`added all ${trackIds.length} tracks`)
 }
 
 let spotifyApi = null;

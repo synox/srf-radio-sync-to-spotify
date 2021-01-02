@@ -23,9 +23,9 @@ async function copyToSpotify(channel, fromDate) {
 
     const songs = await srf.getPlaylist(channel, fromDate, fromDate)
 
-    const spotifyTrackIds = await spotify.findSongs(songs)
+    const spotifyTracks =  await spotify.findSongs(songs)
 
-    spotify.createPlaylist(name, spotifyTrackIds);
+    await spotify.createPlaylist(name, spotifyTracks);
 }
 
 main();
