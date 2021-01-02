@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "xo",
     "start": "node --es-module-specifier-resolution=node index.js"
   },
   "keywords": [],
@@ -17,6 +17,6 @@
   },
   "type": "module",
   "devDependencies": {
-    "eslint": "^7.17.0"
+    "xo": "^0.37.1"
   }
 }
