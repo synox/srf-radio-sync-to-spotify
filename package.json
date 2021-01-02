@@ -22,6 +22,7 @@
   "xo": {
     "semicolon": false,
     "prettier": true,
+    "space": 4,
     "rules": {
       "no-unused-vars": [
         "error",
