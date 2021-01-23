@@ -3,6 +3,9 @@
 # Usage
 Create spotify app https://developer.spotify.com/documentation/general/guides/app-settings/#register-your-app and create file `spotify_credentials.json`
 
+# Example
+https://open.spotify.com/playlist/3kIk50muB3X5IUVHaMuCXq?si=_TAGFkReQZuAW0usXLM5lQ
+
 # TODO
 - Use refresh-token for automatic login to spotify. Currently the tokens are only valid for a few minutes. 
 - Wrap it in a docker container so it can be executed automatically. 
